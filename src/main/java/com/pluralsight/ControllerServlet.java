@@ -17,17 +17,18 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/ControllerServlet/")
 public class ControllerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private ArrayList<Book> bookList = new ArrayList<>();
+	private BookDAO bookDAO;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ControllerServlet() {
         super();
-        // TODO Auto-generated constructor stub
-       bookList.add(new Book("To Kill a Mackingbird", "Harper Lee", 5.5f));
-       bookList.add(new Book("1984", "George Orwell", 4.5f));
-       bookList.add(new Book("Frankenstein", "Mary Shelly", 4f));
+        
+        bookDAO = new BookDAO();
+        bookDAO.connect();
+        bookDAO.disconnect();   
+
     }
 
 	/**
@@ -51,7 +52,9 @@ public class ControllerServlet extends HttpServlet {
 	}
 
 	private void listBooks(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setAttribute("books_list", bookList);
+		ArrayList<Book> books = bookDAO.listAllBooks();
+		
+		request.setAttribute("books_list", books);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/BookList.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -77,7 +80,7 @@ public class ControllerServlet extends HttpServlet {
 		String priceString = request.getParameter("bookprice");
 		
 		Book newBook = new Book(title, author, Float.parseFloat(priceString));
-		bookList.add(newBook);
+		//bookList.add(newBook);
 		
 		response.sendRedirect("list");
 		
