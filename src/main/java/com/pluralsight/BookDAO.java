@@ -68,6 +68,25 @@ public class BookDAO {
 		return listBook;
 	}
 	
-	
+	public boolean insertBook(Book book) {
+		connect();
+		String sql = "INSERT INTO book (title, author, price) VALUES (?, ?, ?)";
+		
+		boolean rowInserted = false;
+		try {
+			PreparedStatement statement = jdbcConnection.prepareStatement(sql);
+			statement.setString(1, book.getTitle());
+			statement.setString(2, book.getAuthor());
+			statement.setFloat(3, book.getPrice());
+			
+			rowInserted = statement.executeUpdate() > 0;
+			statement.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		disconnect();
+		return rowInserted;
+	}
 
 }

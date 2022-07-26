@@ -80,7 +80,8 @@ public class ControllerServlet extends HttpServlet {
 		String priceString = request.getParameter("bookprice");
 		
 		Book newBook = new Book(title, author, Float.parseFloat(priceString));
-		//bookList.add(newBook);
+
+		bookDAO.insertBook(newBook);
 		
 		response.sendRedirect("list");
 		
